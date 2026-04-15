@@ -1,120 +1,75 @@
-let employees=[];
+let employees = [];
 
-function addEmployee(){
+function addEmployee() {
+    let name = document.getElementById("name").value;
+    let id = document.getElementById("id").value;
+    let salary = parseFloat(document.getElementById("salary").value);
+    let dept = document.getElementById("dept").value;
 
-let name=document.getElementById("name").value;
-let id=document.getElementById("id").value;
-let salary=document.getElementById("salary").value;
-let dept=document.getElementById("dept").value;
+    if (name === "" || id === "" || salary === "" || dept === "") {
+        alert("Please fill all fields");
+        return;
+    }
 
-if(name=="" || id=="" || salary=="" || dept==""){
-alert("Please fill all fields!");
-return;
+    let emp = {
+        name: name,
+        id: id,
+        salary: salary,
+        dept: dept
+    };
+
+    employees.push(emp);
+    alert("Employee Added Successfully!");
+
+    document.getElementById("name").value = "";
+    document.getElementById("id").value = "";
+    document.getElementById("salary").value = "";
+    document.getElementById("dept").value = "";
 }
 
-salary=parseInt(salary);
+function displayEmployees() {
+    let output = "<h3>All Employees:</h3>";
 
-if(isNaN(salary)){
-alert("Enter valid salary!");
-return;
+    employees.forEach(emp => {
+        output += `Name: ${emp.name} | ID: ${emp.id} | Salary: ₹${emp.salary} | Dept: ${emp.dept} <br>`;
+    });
+
+    document.getElementById("output").innerHTML = output;
 }
 
-employees.push({name,id,salary,dept});
+function filterSalary() {
+    let filtered = employees.filter(emp => emp.salary > 50000);
 
-alert("Employee added successfully!");
+    let output = "<h3>Employees with Salary > ₹50000:</h3>";
 
-document.getElementById("name").value="";
-document.getElementById("id").value="";
-document.getElementById("salary").value="";
-document.getElementById("dept").value="";
+    filtered.forEach(emp => {
+        output += `Name: ${emp.name} | Salary: ₹${emp.salary} <br>`;
+    });
+
+    document.getElementById("output").innerHTML = output;
 }
 
-function displayAll(){
-
-if(employees.length==0){
-document.getElementById("output").innerHTML="No employees added.";
-return;
+function totalSalary() {
+    let total = employees.reduce((sum, emp) => sum + emp.salary, 0);
+    document.getElementById("output").innerHTML =
+        `<h3>Total Salary: ₹${total}</h3>`;
 }
 
-let text="<b>Employee List:</b><br>";
+function averageSalary() {
+    if (employees.length === 0) return;
 
-employees.forEach(e=>{
-text+=e.name+" | "+e.id+" | "+e.salary+" | "+e.dept+"<br>";
-});
+    let total = employees.reduce((sum, emp) => sum + emp.salary, 0);
+    let avg = total / employees.length;
 
-document.getElementById("output").innerHTML=text;
+    document.getElementById("output").innerHTML =
+        `<h3>Average Salary: ₹${avg.toFixed(2)}</h3>`;
 }
 
-function salaryFilter(){
+function countDepartment() {
+    let dept = prompt("Enter Department Name:");
 
-let text="<b>Employees with Salary > 50000:</b><br>";
-let found=false;
+    let count = employees.filter(emp => emp.dept.toLowerCase() === dept.toLowerCase()).length;
 
-employees.forEach(e=>{
-if(e.salary>50000){
-text+=e.name+" | "+e.salary+" | "+e.dept+"<br>";
-found=true;
-}
-});
-
-if(!found){
-text="No employees with salary greater than 50000.";
-}
-
-document.getElementById("output").innerHTML=text;
-}
-
-function totalSalary(){
-
-let total=0;
-
-employees.forEach(e=>{
-total+=e.salary;
-});
-
-document.getElementById("output").innerHTML="<b>Total Salary:</b> "+total;
-}
-
-function averageSalary(){
-
-if(employees.length==0){
-document.getElementById("output").innerHTML="No employees added.";
-return;
-}
-
-let total=0;
-
-employees.forEach(e=>{
-total+=e.salary;
-});
-
-let avg=total/employees.length;
-
-document.getElementById("output").innerHTML="<b>Average Salary:</b> "+avg;
-}
-
-function countDept(){
-
-let deptName=prompt("Enter department name:");
-
-if(deptName==null || deptName==""){
-alert("Department name required!");
-return;
-}
-
-let count=0;
-
-let text="<b>Employees in "+deptName+" Department:</b><br>";
-
-employees.forEach(e=>{
-if(e.dept.toLowerCase()==deptName.toLowerCase()){
-count++;
-text+=e.name+" | "+e.id+" | "+e.salary+" | "+e.dept+"<br>";
-}
-});
-
-text+="<br><b>Total Employees:</b> "+count;
-
-document.getElementById("output").innerHTML=text;
-
+    document.getElementById("output").innerHTML =
+        `<h3>Employees in ${dept}: ${count}</h3>`;
 }
